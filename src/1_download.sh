@@ -18,3 +18,6 @@ do
     # Download the file to the downloads directory
     wget -P ./downloads "$url"
 done
+
+# unzip pathway-biopax.tar.gz
+tar -xzf ./downloads/pathway-biopax.tar.gz -C ./cache

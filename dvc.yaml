@@ -1,0 +1,35 @@
+stages:
+
+  status:
+    cmd: bash src/0_status.sh
+    
+  download:
+    cmd: bash src/1_download.sh
+    deps:
+    - downloads/bioplanet.html
+    outs:
+    - downloads/pathway.csv
+    - downloads/pathway-categories.csv
+    - downloads/pathway-biopax.tar.gz
+    - downloads/pathway-disease-mapping.tsv.zip
+    - downloads/pathway-assay-mapping.tsv.zip
+
+  process_tables:
+    cmd: Rscript src/2_process_tables.py
+    deps:
+    - downloads/pathway.csv
+    - downloads/pathway-categories.csv
+    - downloads/pathway-disease-mapping.tsv.zip
+    - downloads/pathway-assay-mapping.tsv.zip
+    outs:
+    - brick/pathway.parquet
+    - brick/pathway_category.parquet
+    - brick/pathway_disease_mapping.parquet
+    - brick/pathway_assay_mapping.parquet
+
+  process_rdf:
+    cmd: python src_3_process_rdf.py
+    deps:
+    - downloads/pathway-biopax.tar.gz
+    outs:
+    - brick/biopax_rdf.parquet
