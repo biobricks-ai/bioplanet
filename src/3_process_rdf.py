@@ -5,7 +5,7 @@ from rdflib.extras.external_graph_libs import rdflib_to_networkx_multidigraph
 import pandas as pd
 import pyarrow as pa
 
-owl_files = glob.glob("downloads/biopax/individual_pathways/*.owl")
+owl_files = glob.glob("cache/individual_pathways/*.owl")
 g = rdflib.Graph()
 
 for owl_file in tqdm(owl_files):

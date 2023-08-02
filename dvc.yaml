@@ -9,16 +9,16 @@ stages:
     - downloads/bioplanet.html
     outs:
     - downloads/pathway.csv
-    - downloads/pathway-categories.csv
+    - downloads/pathway-category.csv
     - downloads/pathway-biopax.tar.gz
     - downloads/pathway-disease-mapping.tsv.zip
     - downloads/pathway-assay-mapping.tsv.zip
 
   process_tables:
-    cmd: Rscript src/2_process_tables.py
+    cmd: Rscript src/2_process_tables.R
     deps:
     - downloads/pathway.csv
-    - downloads/pathway-categories.csv
+    - downloads/pathway-category.csv
     - downloads/pathway-disease-mapping.tsv.zip
     - downloads/pathway-assay-mapping.tsv.zip
     outs:
@@ -28,7 +28,7 @@ stages:
     - brick/pathway_assay_mapping.parquet
 
   process_rdf:
-    cmd: python src_3_process_rdf.py
+    cmd: python3 src/3_process_rdf.py
     deps:
     - downloads/pathway-biopax.tar.gz
     outs:

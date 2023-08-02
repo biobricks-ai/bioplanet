@@ -1,0 +1,80 @@
+schema: '2.0'
+stages:
+  status:
+    cmd: bash src/0_status.sh
+  download:
+    cmd: bash src/1_download.sh
+    deps:
+    - path: downloads/bioplanet.html
+      hash: md5
+      md5: fbdc7bf57ae20f31cb9726bea6dc1c63
+      size: 19322
+    outs:
+    - path: downloads/pathway-assay-mapping.tsv.zip
+      hash: md5
+      md5: d1e145496939741c43745f0a3c9eb6cf
+      size: 2630798
+    - path: downloads/pathway-biopax.tar.gz
+      hash: md5
+      md5: ddb73d75c808a779e398707b1eec3d29
+      size: 133156529
+    - path: downloads/pathway-category.csv
+      hash: md5
+      md5: 6dc5f304fb2ecf9384ec86ae5709fd36
+      size: 680279
+    - path: downloads/pathway-disease-mapping.tsv.zip
+      hash: md5
+      md5: ee94cf1e5f89e8ffb728949cffbb54d0
+      size: 1508089
+    - path: downloads/pathway.csv
+      hash: md5
+      md5: 08d2bba21c339275547edc63c746988f
+      size: 4696219
+  process_tables:
+    cmd: Rscript src/2_process_tables.R
+    deps:
+    - path: downloads/pathway-assay-mapping.tsv.zip
+      hash: md5
+      md5: d1e145496939741c43745f0a3c9eb6cf
+      size: 2630798
+    - path: downloads/pathway-category.csv
+      hash: md5
+      md5: 6dc5f304fb2ecf9384ec86ae5709fd36
+      size: 680279
+    - path: downloads/pathway-disease-mapping.tsv.zip
+      hash: md5
+      md5: ee94cf1e5f89e8ffb728949cffbb54d0
+      size: 1508089
+    - path: downloads/pathway.csv
+      hash: md5
+      md5: 08d2bba21c339275547edc63c746988f
+      size: 4696219
+    outs:
+    - path: brick/pathway.parquet
+      hash: md5
+      md5: 815f4d56b70d2c778686c7b2deaf0867
+      size: 421840
+    - path: brick/pathway_assay_mapping.parquet
+      hash: md5
+      md5: 218d154649de3817dd5942b0478fddb8
+      size: 546501
+    - path: brick/pathway_category.parquet
+      hash: md5
+      md5: 9c91ac7182bd1824ff58dc5342fbae1e
+      size: 71624
+    - path: brick/pathway_disease_mapping.parquet
+      hash: md5
+      md5: 529cd8b44f43aea28357a57b71f51ee3
+      size: 655451
+  process_rdf:
+    cmd: python3 src/3_process_rdf.py
+    deps:
+    - path: downloads/pathway-biopax.tar.gz
+      hash: md5
+      md5: ddb73d75c808a779e398707b1eec3d29
+      size: 133156529
+    outs:
+    - path: brick/biopax_rdf.parquet
+      hash: md5
+      md5: 63bd2f9e4b3ed6a15478a017d5924dca
+      size: 334104815
